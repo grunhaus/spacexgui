@@ -1,7 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 
-const FavButton = ({
+interface FavButtonProps {
+	id: string;
+	url: string;
+	image: string;
+	title: string;
+	description: string;
+	date: string;
+	setFavoriteList: (e: any) => void;
+	favoriteList: object[];
+}
+
+const FavButton: FC<FavButtonProps> = ({
 	id,
 	url,
 	image,
@@ -38,7 +49,7 @@ const FavButton = ({
 
 			setFavorite(true);
 		} else if (favorite) {
-			copyFavoriteList.map((favLaunch, index) => {
+			copyFavoriteList.map((favLaunch: any, index: number) => {
 				if (favLaunch.id === id) {
 					copyFavoriteList.splice(index, 1);
 					setFavorite(false);

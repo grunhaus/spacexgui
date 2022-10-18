@@ -1,19 +1,22 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import spacex from "../api/spacex";
 import CardGrid from "../components/CardGrid";
 import Header from "../components/Header";
 import Pagination from "../components/Pagination";
 
+type Launch = {
+	mission_name: string;
+};
+
 const LaunchesMain: FC = () => {
-	const [launches, setLaunches] = useState([]);
-	const [rockets, setRockets] = useState([]);
+	const [launches, setLaunches] = useState<any>([]);
+	const [rockets, setRockets] = useState<any>([]);
 	const [merged, setMerged] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [postsPerPage, setPostsPerPage] = useState(9);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filteredResult, setFilteredResult] = useState([]);
 
-	console.log(filteredResult);
 	useEffect(() => {
 		const fetchRockets = async () => {
 			const responseRocket = await spacex.get("/rockets");
@@ -23,11 +26,11 @@ const LaunchesMain: FC = () => {
 			setLaunches(responseLaunches.data);
 		};
 		fetchRockets();
-	}, []);
+	}, [filteredResult]);
 
 	useEffect(() => {
 		const mergedApis = () => {
-			const launchesCopy = [...launches];
+			const launchesCopy: any = [...launches];
 
 			for (let i = 0; i < launches.length; i++) {
 				for (let j = 0; j < rockets.length; j++) {
@@ -39,22 +42,24 @@ const LaunchesMain: FC = () => {
 			setMerged(launchesCopy);
 		};
 		mergedApis();
-	}, [filteredResult]);
+	}, []);
 
-	const handleSearchChange = (event) => {
+	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 
-		if (searchTerm !== "") {
-			const filteredData = merged.filter((launch) => {
+		if (searchTerm.length === 0) {
+			setFilteredResult(merged);
+		} else if (searchTerm.length > 0) {
+			const filteredData = merged.filter((launch: Launch) => {
 				return `${launch.mission_name}`
 					.toLowerCase()
 					.includes(searchTerm.toLowerCase());
 			});
 			setFilteredResult(filteredData);
-		} else {
-			setFilteredResult(merged);
 		}
 	};
+
+	console.log(searchTerm);
 
 	const lastPostIndex = currentPage * postsPerPage;
 	const firstPostIndex = lastPostIndex - postsPerPage;
@@ -72,6 +77,7 @@ const LaunchesMain: FC = () => {
 						}}
 						onChange={(event) => handleSearchChange(event)}
 						placeholder="Search all launches..."
+						value={searchTerm}
 						className="md:w-[26rem] w-[16rem] h-[3rem] rounded-lg mt-10 mx-5 md:mx-24 rounded-3"
 					/>
 				</div>

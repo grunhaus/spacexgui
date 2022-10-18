@@ -5,7 +5,7 @@ import { MdOutlineArrowBackIos } from "react-icons/md";
 
 const LaunchesShow: FC = () => {
 	const location = useLocation();
-	const { launch, favoriteList } = location.state;
+	const { launch } = location.state;
 
 	return (
 		<div className="text-white">

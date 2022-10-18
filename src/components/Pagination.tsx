@@ -1,17 +1,19 @@
 import { FC } from "react";
 
-const Pagination: FC = ({
+interface PaginationProps {
+	totalPosts: number;
+	postsPerPage: number;
+	setCurrentPage: (e: number) => void;
+	currentPage: number;
+}
+
+const Pagination: FC<PaginationProps> = ({
 	totalPosts,
 	postsPerPage,
 	setCurrentPage,
 	currentPage,
 }) => {
 	let pages: Array<number> = [];
-
-	console.log(totalPosts);
-	console.log(postsPerPage);
-	console.log(setCurrentPage);
-	console.log(currentPage);
 
 	for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
 		pages.push(i);

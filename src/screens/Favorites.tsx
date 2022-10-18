@@ -2,22 +2,32 @@ import { FC, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import FavButton from "../components/FavButton";
 import Header from "../components/Header";
-import Pagination from "../components/Pagination";
+//import Pagination from "../components/Pagination";
+
+type Launch = {
+	id: string;
+	title: string;
+	description: string;
+	date: string;
+	image: string;
+};
 
 const Favorites: FC = () => {
 	const [favoriteList, setFavoriteList] = useState([]);
 
 	useEffect(() => {
-		const favoriteStore = JSON.parse(localStorage.getItem("favorites"));
+		const favoriteStore = JSON.parse(
+			localStorage.getItem("favorites") as string
+		);
 		if (favoriteStore !== null) {
-			setFavoriteList(JSON.parse(localStorage.getItem("favorites")));
+			setFavoriteList(JSON.parse(localStorage.getItem("favorites") as string));
 		} else {
 			setFavoriteList([]);
 		}
 	}, []);
 
 	const renderFavoriteList = () => {
-		return favoriteList.map((launch) => {
+		return favoriteList.map((launch: Launch) => {
 			return (
 				<div>
 					<Link
@@ -113,12 +123,6 @@ const Favorites: FC = () => {
 				<div className="grid sm:grid-cols-1 md:grid-cols-2 md:mx-20 lg:grid-cols-3 lg:mx-20  mt-10">
 					{favoriteList.length === 0 ? null : renderFavoriteList()}
 				</div>
-				<Pagination
-					totalPosts={undefined}
-					postsPerPage={undefined}
-					setCurrentPage={undefined}
-					currentPage={undefined}
-				/>
 			</div>
 		</>
 	);
