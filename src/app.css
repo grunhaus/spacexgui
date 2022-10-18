@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+	background-color: #121212;
+	font-family: "D-DIN", sans-serif;
+}
+
+.active {
+	background-color: white;
+	color: black;
+}
