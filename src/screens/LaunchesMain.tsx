@@ -26,7 +26,7 @@ const LaunchesMain: FC = () => {
 			setLaunches(responseLaunches.data);
 		};
 		fetchRockets();
-	}, [filteredResult]);
+	}, []);
 
 	useEffect(() => {
 		const mergedApis = () => {
@@ -42,7 +42,7 @@ const LaunchesMain: FC = () => {
 			setMerged(launchesCopy);
 		};
 		mergedApis();
-	}, []);
+	}, [filteredResult]);
 
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
