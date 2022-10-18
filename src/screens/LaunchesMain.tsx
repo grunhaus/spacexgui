@@ -3,46 +3,40 @@ import spacex from "../api/spacex";
 import CardGrid from "../components/CardGrid";
 import Header from "../components/Header";
 import Pagination from "../components/Pagination";
+import SkeletonGrid from "../components/SkeletonGrid";
 
 type Launch = {
 	mission_name: string;
 };
 
 const LaunchesMain: FC = () => {
-	const [launches, setLaunches] = useState<any>([]);
-	const [rockets, setRockets] = useState<any>([]);
 	const [merged, setMerged] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [postsPerPage, setPostsPerPage] = useState(9);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filteredResult, setFilteredResult] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		const fetchRockets = async () => {
-			const responseRocket = await spacex.get("/rockets");
-			const responseLaunches = await spacex.get("/launches");
+		const fetchRockets = () =>
+			Promise.all([spacex.get("/rockets"), spacex.get("/launches")]);
 
-			setRockets(responseRocket.data);
-			setLaunches(responseLaunches.data);
-		};
-		fetchRockets();
-	}, []);
-
-	useEffect(() => {
-		const mergedApis = () => {
-			const launchesCopy: any = [...launches];
+		fetchRockets().then(([responseRocket, responseLaunches]) => {
+			const rockets = responseRocket.data;
+			const launches = responseLaunches.data;
 
 			for (let i = 0; i < launches.length; i++) {
 				for (let j = 0; j < rockets.length; j++) {
 					if (launches[i].rocket.rocket_name === rockets[j].rocket_name) {
-						launchesCopy[i].rocket = rockets[j];
+						launches[i].rocket = rockets[j];
 					}
 				}
 			}
-			setMerged(launchesCopy);
-		};
-		mergedApis();
-	}, [filteredResult]);
+
+			setMerged(launches);
+			setIsLoading(false);
+		});
+	}, []);
 
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
@@ -58,8 +52,6 @@ const LaunchesMain: FC = () => {
 			setFilteredResult(filteredData);
 		}
 	};
-
-	console.log(searchTerm);
 
 	const lastPostIndex = currentPage * postsPerPage;
 	const firstPostIndex = lastPostIndex - postsPerPage;
@@ -84,11 +76,16 @@ const LaunchesMain: FC = () => {
 				<div className="mx-5 md:ml-24 mt-5 opacity-40">
 					Total({currentPosts.length})
 				</div>
-				<CardGrid
-					postsData={currentPosts}
-					filteredResult={filteredResult}
-					searchTerm={searchTerm}
-				/>
+				{isLoading ? (
+					<SkeletonGrid cards={postsPerPage} />
+				) : (
+					<CardGrid
+						postsData={currentPosts}
+						filteredResult={filteredResult}
+						searchTerm={searchTerm}
+					/>
+				)}
+
 				<Pagination
 					totalPosts={merged.length}
 					postsPerPage={postsPerPage}
