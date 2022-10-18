@@ -12,7 +12,13 @@ const SkeletonGrid: FC<SkeletonProps> = ({ cards }) => {
 			.fill(0)
 			.map((_, i) => {
 				return (
-					<div key={i} className="mx-12 mt-10">
+					<div
+						key={i}
+						style={{
+							boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.25)",
+						}}
+						className="mx-12 mt-10"
+					>
 						<SkeletonTheme baseColor="#202020" highlightColor="#444">
 							<Skeleton className="w-auto h-[12rem]" />
 							<Skeleton width={"50%"} />

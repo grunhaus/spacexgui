@@ -87,7 +87,7 @@ const LaunchesMain: FC = () => {
 				)}
 
 				<Pagination
-					totalPosts={merged.length}
+					totalPosts={filteredResult.length}
 					postsPerPage={postsPerPage}
 					setCurrentPage={setCurrentPage}
 					currentPage={currentPage}

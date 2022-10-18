@@ -29,10 +29,9 @@ const Favorites: FC = () => {
 	const renderFavoriteList = () => {
 		return favoriteList.map((launch: Launch) => {
 			return (
-				<div>
+				<div key={launch.title}>
 					<Link
 						to={`/launches/${launch.id}`}
-						key={launch.title}
 						state={{
 							launch: launch,
 							favoriteList: favoriteList,
