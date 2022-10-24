@@ -68,7 +68,7 @@ const LaunchesMain: FC = () => {
 								"linear-gradient(0deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)), #121212",
 						}}
 						onChange={(event) => handleSearchChange(event)}
-						placeholder="Search all launches..."
+						placeholder="  Search all launches..."
 						value={searchTerm}
 						className="md:w-[26rem] w-[16rem] h-[3rem] rounded-lg mt-10 mx-5 md:mx-24 rounded-3"
 					/>
@@ -87,7 +87,7 @@ const LaunchesMain: FC = () => {
 				)}
 
 				<Pagination
-					totalPosts={filteredResult.length}
+					totalPosts={merged.length}
 					postsPerPage={postsPerPage}
 					setCurrentPage={setCurrentPage}
 					currentPage={currentPage}
